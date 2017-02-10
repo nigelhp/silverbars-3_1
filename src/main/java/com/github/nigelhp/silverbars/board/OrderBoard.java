@@ -3,6 +3,8 @@ package com.github.nigelhp.silverbars.board;
 import com.github.nigelhp.silverbars.order.Order;
 
 import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
@@ -32,6 +34,11 @@ public class OrderBoard {
     }
 
     public Summary getSummary() {
-        return new Summary(new ArrayList<>(buysByPrice.values()), new ArrayList<>(sellsByPrice.values()));
+        Comparator<QuantityPrice> priceDescending = Comparator.comparing(QuantityPrice::getPrice).reversed();
+
+        List<QuantityPrice> buys = new ArrayList<>(buysByPrice.values());
+        buys.sort(priceDescending);
+
+        return new Summary(buys, new ArrayList<>(sellsByPrice.values()));
     }
 }

@@ -12,6 +12,14 @@ public class QuantityPrice {
         this.price = price;
     }
 
+    public BigDecimal getQuantity() {
+        return quantity;
+    }
+
+    public Integer getPrice() {
+        return price;
+    }
+
     public QuantityPrice add(QuantityPrice other) {
         return new QuantityPrice(quantity.add(other.quantity), price);
     }
