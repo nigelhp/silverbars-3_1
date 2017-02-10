@@ -1,5 +1,6 @@
 package com.github.nigelhp.silverbars.board;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Summary {
@@ -13,11 +14,11 @@ public class Summary {
     }
 
     public List<QuantityPrice> getBuyEntries() {
-        return buyEntries;
+        return new ArrayList<>(buyEntries);
     }
 
     public List<QuantityPrice> getSellEntries() {
-        return sellEntries;
+        return new ArrayList<>(sellEntries);
     }
 
     @Override
