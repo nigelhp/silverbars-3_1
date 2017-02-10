@@ -35,10 +35,14 @@ public class OrderBoard {
 
     public Summary getSummary() {
         Comparator<QuantityPrice> priceDescending = Comparator.comparing(QuantityPrice::getPrice).reversed();
+        Comparator<QuantityPrice> priceAscending = Comparator.comparing(QuantityPrice::getPrice);
 
         List<QuantityPrice> buys = new ArrayList<>(buysByPrice.values());
         buys.sort(priceDescending);
 
-        return new Summary(buys, new ArrayList<>(sellsByPrice.values()));
+        List<QuantityPrice> sells = new ArrayList<>(sellsByPrice.values());
+        sells.sort(priceAscending);
+
+        return new Summary(buys, sells);
     }
 }

@@ -44,7 +44,7 @@ Feature: An order is added to the board upon registration
       |          3.5 |       306 |           2.0 |        306 |
 
 
-  Scenario: Buy orders are listed highest price first
+  Scenario: Buy orders are ordered highest price first
     Given "user1" registers an order to BUY 3.5 kg for £306
     And "user2" registers an order to BUY 1.2 kg for £310
     When "user3" registers an order to BUY 1.5 kg for £307
@@ -53,3 +53,14 @@ Feature: An order is added to the board upon registration
       |          1.2 |       310 |               |            |
       |          1.5 |       307 |               |            |
       |          3.5 |       306 |               |            |
+
+
+  Scenario: Sell orders are ordered lowest price first
+    Given "user1" registers an order to SELL 1.5 kg for £307
+    And "user2" registers an order to SELL 1.2 kg for £310
+    When "user3" registers an order to SELL 3.5 kg for £306
+    Then the order board is:
+      | buy quantity | buy price | sell quantity | sell price |
+      |              |           |           3.5 |        306 |
+      |              |           |           1.5 |        307 |
+      |              |           |           1.2 |        310 |

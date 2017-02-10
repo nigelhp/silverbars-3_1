@@ -97,6 +97,20 @@ public class OrderBoardTest {
                 aSummaryEntry(quantity("2.5"), price(306))));
     }
 
+    @Test
+    public void anOrderBoardSummaryListsSellOrdersLowestPriceFirst() {
+        underTest.register(aSellOrder(quantity("2.5"), price(308)));
+        underTest.register(aSellOrder(quantity("2.5"), price(310)));
+        underTest.register(aSellOrder(quantity("2.5"), price(306)));
+
+        Summary summary = underTest.getSummary();
+
+        assertThat(summary.getSellEntries(), contains(
+                aSummaryEntry(quantity("2.5"), price(306)),
+                aSummaryEntry(quantity("2.5"), price(308)),
+                aSummaryEntry(quantity("2.5"), price(310))));
+    }
+
     private static Order aBuyOrder(BigDecimal quantity, Integer price) {
         return aBuyOrder(SOME_USER_ID, quantity, price);
     }
