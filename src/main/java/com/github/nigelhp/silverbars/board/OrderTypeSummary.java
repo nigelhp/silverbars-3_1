@@ -16,6 +16,8 @@ class OrderTypeSummary {
     private final ConcurrentMap<Integer, QuantityPrice> entriesByPrice;
 
     OrderTypeSummary(Order.Type orderType, Comparator<QuantityPrice> ordering) {
+        assert (orderType != null) : "orderType may not be null";
+        assert (ordering != null) : "ordering may not be null";
         this.orderType = orderType;
         this.ordering = ordering;
         entriesByPrice = new ConcurrentHashMap<>();

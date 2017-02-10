@@ -13,8 +13,15 @@ public class OrderBoard {
     private final OrderTypeSummary sellSummary;
 
     public OrderBoard() {
-        buySummary = new OrderTypeSummary(BUY, PRICE_DESCENDING_COMPARATOR);
-        sellSummary = new OrderTypeSummary(SELL, PRICE_ASCENDING_COMPARATOR);
+        this(new OrderTypeSummary(BUY, PRICE_DESCENDING_COMPARATOR),
+                new OrderTypeSummary(SELL, PRICE_ASCENDING_COMPARATOR));
+    }
+
+    OrderBoard(OrderTypeSummary buySummary, OrderTypeSummary sellSummary) {
+        assert (buySummary != null) : "buySummary may not be null";
+        assert (sellSummary != null) : "sellSummary may not be null";
+        this.buySummary = buySummary;
+        this.sellSummary = sellSummary;
     }
 
     public void register(Order order) {
