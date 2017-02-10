@@ -49,6 +49,24 @@ public class OrderBoardTest {
     }
 
     @Test
+    public void aBuyOrderIsCancelledFromTheBuySummary() {
+        Order order = aBuyOrder(quantity("3.5"), price(303));
+
+        underTest.cancel(order);
+
+        verify(buySummary).cancel(order);
+    }
+
+    @Test
+    public void aSellOrderIsCancelledFromTheSellSummary() {
+        Order order = aSellOrder(quantity("3.5"), price(303));
+
+        underTest.cancel(order);
+
+        verify(sellSummary).cancel(order);
+    }
+
+    @Test
     public void aSummaryCombinesTheBuyAndSellSummaries() {
         List<QuantityPrice> buyEntries = asList(aSummaryEntry(quantity("3.5"), price(303)));
         List<QuantityPrice> sellEntries = asList(aSummaryEntry(quantity("2.0"), price(306)));

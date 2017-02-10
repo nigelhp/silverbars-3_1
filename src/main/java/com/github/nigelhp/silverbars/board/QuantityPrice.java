@@ -34,11 +34,20 @@ public class QuantityPrice {
     }
 
     QuantityPrice add(QuantityPrice other) {
-        if (price.equals(other.getPrice())) {
-            return new QuantityPrice(quantity.add(other.quantity), price);
-        } else {
-            throw new IllegalArgumentException(String.format("Cannot add a [%s] with price [%s] to one with a price of [%s]",
-                    this.getClass().getSimpleName(), other.getPrice(), price));
+        validatePriceMatchForArithmetic(other);
+        return new QuantityPrice(quantity.add(other.quantity), price);
+    }
+
+    QuantityPrice subtract(QuantityPrice other) {
+        validatePriceMatchForArithmetic(other);
+        return new QuantityPrice(quantity.subtract(other.quantity), price);
+    }
+
+    private void validatePriceMatchForArithmetic(QuantityPrice other) {
+        if (!price.equals(other.getPrice())) {
+            throw new IllegalArgumentException(String.format(
+                    "Cannot perform arithmetic with a %s having a price of [%s] and another having a price of [%s]",
+                    getClass().getSimpleName(), price, other.getPrice()));
         }
     }
 

@@ -26,16 +26,19 @@ public class OrderBoardStepdefs {
     }
 
     @When("^\"([^\"]*)\" registers an order to (BUY|SELL) (\\d\\.\\d) kg for £(\\d+)$")
-    public void registers_an_order_to_BUY_kg_for_£(String userId, String type, String quantity, int price) {
+    public void registers_an_order_to_for(String userId, String type, String quantity, int price) {
         orderBoard.ifPresent(b -> b.register(new Order(userId, Type.valueOf(type), new BigDecimal(quantity), price)));
+    }
+
+    @When("^\"([^\"]*)\" cancels an order to (BUY|SELL) (\\d+\\.\\d) kg for £(\\d+)$")
+    public void cancels_an_order_to_SELL_kg_for_£(String userId, String type, String quantity, int price) {
+        orderBoard.ifPresent(b -> b.cancel(new Order(userId, Type.valueOf(type), new BigDecimal(quantity), price)));
     }
 
     @Then("^the order board is:$")
     public void the_order_board_is(DataTable table) {
         DataTableToSummaryConverter converter = new DataTableToSummaryConverter();
         Optional<Summary> exampleSummary = Optional.of(converter.convert(table));
-
-        Optional<Summary> x = orderBoard.map(OrderBoard::getSummary);
 
         assertThat(orderBoard.map(OrderBoard::getSummary), is(exampleSummary));
     }

@@ -74,6 +74,54 @@ public class QuantityPriceTest {
     }
 
     @Test
+    public void subtractionRequiresMatchingPrices() {
+        QuantityPrice quantityPrice = new QuantityPrice(quantity("2.0"), price(303));
+        QuantityPrice other = new QuantityPrice(quantity("2.0"), price(302));
+        try {
+            quantityPrice.subtract(other);
+            fail("Should have thrown IllegalArgumentException");
+        } catch (IllegalArgumentException expected) {
+            // expected
+        }
+    }
+
+    @Test
+    public void subtractionReturnsTheDifference() {
+        QuantityPrice a = new QuantityPrice(quantity("3.0"), price(303));
+        QuantityPrice b = new QuantityPrice(quantity("1.0"), price(303));
+
+        assertThat(a.subtract(b), is(new QuantityPrice(quantity("2.0"), price(303))));
+    }
+
+    @Test
+    public void subtractionOfSelfReturnsZero() {
+        QuantityPrice a = new QuantityPrice(quantity("3.0"), price(303));
+
+        assertThat(a.subtract(a), is(new QuantityPrice(quantity("0.0"), price(303))));
+    }
+
+    @Test
+    public void subtractionOfIdentityValueDoesNotChangeQuantity() {
+        QuantityPrice a = new QuantityPrice(quantity("3.0"), price(303));
+        QuantityPrice zero = new QuantityPrice(quantity("0.0"), price(303));
+
+        assertThat(a.subtract(zero), is(a));
+    }
+
+    @Test
+    public void subtractionDoesNotPermitANegativeResultQuantity() {
+        QuantityPrice a = new QuantityPrice(quantity("1.0"), price(303));
+        QuantityPrice b = new QuantityPrice(quantity("3.0"), price(303));
+
+        try {
+            a.subtract(b);
+            fail("Should have thrown IllegalArgumentException");
+        } catch (IllegalArgumentException expected) {
+            // expected
+        }
+    }
+
+    @Test
     public void priceAscendingComparator() {
         QuantityPrice price308 = new QuantityPrice(quantity("1.5"), price(308));
         QuantityPrice price310 = new QuantityPrice(quantity("2.5"), price(310));

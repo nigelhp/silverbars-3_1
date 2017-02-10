@@ -29,6 +29,11 @@ public class OrderBoard {
         sellSummary.register(order);
     }
 
+    public void cancel(Order order) {
+        buySummary.cancel(order);
+        sellSummary.cancel(order);
+    }
+
     public Summary getSummary() {
         return new Summary(buySummary.getSummary(), sellSummary.getSummary());
     }

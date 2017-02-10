@@ -50,6 +50,27 @@ public class OrderTypeSummaryTest {
     }
 
     @Test
+    public void aBuySummaryAcceptsABuyOrderOnCancellation() {
+        OrderTypeSummary underTest = new OrderTypeSummary(BUY, SOME_ORDERING);
+        Order order = aBuyOrder(quantity("3.5"), price(306));
+        underTest.register(order);
+
+        underTest.cancel(order);
+
+        assertThat(underTest.getSummary(), empty());
+    }
+
+    @Test
+    public void aBuySummaryIgnoresASellOrderOnCancellation() {
+        OrderTypeSummary underTest = new OrderTypeSummary(BUY, SOME_ORDERING);
+        underTest.register(aBuyOrder(quantity("3.5"), price(306)));
+
+        underTest.cancel(aSellOrder(quantity("3.5"), price(306)));
+
+        assertThat(underTest.getSummary(), contains(aSummaryEntry(quantity("3.5"), price(306))));
+    }
+
+    @Test
     public void aSellSummaryAcceptsASellOrderOnRegistration() {
         OrderTypeSummary underTest = new OrderTypeSummary(SELL, SOME_ORDERING);
 
@@ -65,6 +86,27 @@ public class OrderTypeSummaryTest {
         underTest.register(aBuyOrder(quantity("3.5"), price(306)));
 
         assertThat(underTest.getSummary(), empty());
+    }
+
+    @Test
+    public void aSellSummaryAcceptsASellOrderOnCancellation() {
+        OrderTypeSummary underTest = new OrderTypeSummary(SELL, SOME_ORDERING);
+        Order order = aSellOrder(quantity("3.5"), price(306));
+        underTest.register(order);
+
+        underTest.cancel(order);
+
+        assertThat(underTest.getSummary(), empty());
+    }
+
+    @Test
+    public void aSellSummaryIgnoresABuyOrderOnCancellation() {
+        OrderTypeSummary underTest = new OrderTypeSummary(SELL, SOME_ORDERING);
+        underTest.register(aSellOrder(quantity("3.5"), price(306)));
+
+        underTest.cancel(aBuyOrder(quantity("3.5"), price(306)));
+
+        assertThat(underTest.getSummary(), contains(aSummaryEntry(quantity("3.5"), price(306))));
     }
 
     @Test
@@ -85,6 +127,17 @@ public class OrderTypeSummaryTest {
         underTest.register(someOrder("user2", quantity("2.0"), price(306)));
 
         assertThat(underTest.getSummary(), contains(aSummaryEntry(quantity("5.5"), price(306))));
+    }
+
+    @Test
+    public void aSummaryRetainsAPriceEntryFollowingCancellationWhenQuantityIsNonZero() {
+        OrderTypeSummary underTest = new OrderTypeSummary(SOME_ORDER_TYPE, SOME_ORDERING);
+        Order mistakenOrder = someOrder("user1", quantity("3.5"), price(306));
+        underTest.register(mistakenOrder);
+        underTest.register(someOrder("user2", quantity("2.0"), price(306)));
+        underTest.cancel(mistakenOrder);
+
+        assertThat(underTest.getSummary(), contains(aSummaryEntry(quantity("2.0"), price(306))));
     }
 
     @Test
