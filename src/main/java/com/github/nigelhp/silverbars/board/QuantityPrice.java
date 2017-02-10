@@ -12,6 +12,10 @@ public class QuantityPrice {
         this.price = price;
     }
 
+    public QuantityPrice add(QuantityPrice other) {
+        return new QuantityPrice(quantity.add(other.quantity), price);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -32,6 +36,6 @@ public class QuantityPrice {
 
     @Override
     public String toString() {
-        return String.format("%f kg for £%s", quantity, price);
+        return String.format("%.1f kg for £%s", quantity, price);
     }
 }

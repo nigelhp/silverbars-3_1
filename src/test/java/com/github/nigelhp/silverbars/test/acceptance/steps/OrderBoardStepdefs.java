@@ -35,6 +35,8 @@ public class OrderBoardStepdefs {
         DataTableToSummaryConverter converter = new DataTableToSummaryConverter();
         Optional<Summary> exampleSummary = Optional.of(converter.convert(table));
 
+        Optional<Summary> x = orderBoard.map(OrderBoard::getSummary);
+
         assertThat(orderBoard.map(OrderBoard::getSummary), is(exampleSummary));
     }
 }
