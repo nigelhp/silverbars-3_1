@@ -2,8 +2,8 @@ package com.github.nigelhp.silverbars.board;
 
 import org.junit.Test;
 
-import static com.github.nigelhp.silverbars.board.TestLanguage.price;
-import static com.github.nigelhp.silverbars.board.TestLanguage.quantity;
+import static com.github.nigelhp.silverbars.board.CommonTestLanguage.price;
+import static com.github.nigelhp.silverbars.board.CommonTestLanguage.quantity;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 

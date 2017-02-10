@@ -5,8 +5,8 @@ import org.junit.Test;
 
 import java.math.BigDecimal;
 
-import static com.github.nigelhp.silverbars.board.TestLanguage.price;
-import static com.github.nigelhp.silverbars.board.TestLanguage.quantity;
+import static com.github.nigelhp.silverbars.board.CommonTestLanguage.price;
+import static com.github.nigelhp.silverbars.board.CommonTestLanguage.quantity;
 import static com.github.nigelhp.silverbars.order.Order.Type.BUY;
 import static com.github.nigelhp.silverbars.order.Order.Type.SELL;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -72,6 +72,17 @@ public class OrderBoardTest {
         assertThat(summary.getSellEntries(), contains(aSummaryEntry(quantity("5.5"), price(306))));
     }
 
+    @Test
+    public void anOrderBoardSummaryDoesNotAggregateOrdersOfDifferentTypes() {
+        underTest.register(aBuyOrder(quantity("3.5"), price(306)));
+        underTest.register(aSellOrder(quantity("3.5"), price(306)));
+
+        Summary summary = underTest.getSummary();
+
+        assertThat("buy", summary.getBuyEntries(), contains(aSummaryEntry(quantity("3.5"), price(306))));
+        assertThat("sell", summary.getSellEntries(), contains(aSummaryEntry(quantity("3.5"), price(306))));
+    }
+
     private static Order aBuyOrder(BigDecimal quantity, Integer price) {
         return aBuyOrder(SOME_USER_ID, quantity, price);
     }
@@ -85,7 +96,7 @@ public class OrderBoardTest {
     }
 
     private static Order aSellOrder(String userId, BigDecimal quantity, Integer price) {
-        return new Order("user1", SELL, quantity, price);
+        return new Order(userId, SELL, quantity, price);
     }
 
     private static QuantityPrice aSummaryEntry(BigDecimal quantity, Integer price) {

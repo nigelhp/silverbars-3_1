@@ -35,3 +35,12 @@ Feature: An order is added to the board upon registration
     Then the order board is:
       | buy quantity | buy price | sell quantity | sell price |
       |          5.5 |       306 |               |            |
+
+
+  Scenario: Orders with the same price but different types are not aggregated
+    Given there are no existing orders
+    And "user1" registers an order to BUY 3.5 kg for £306
+    When "user4" registers an order to SELL 2.0 kg for £306
+    Then the order board is:
+      | buy quantity | buy price | sell quantity | sell price |
+      |          3.5 |       306 |           2.0 |        306 |
