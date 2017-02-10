@@ -12,6 +12,14 @@ public class Summary {
         this.sellEntries = sellEntries;
     }
 
+    public List<QuantityPrice> getBuyEntries() {
+        return buyEntries;
+    }
+
+    public List<QuantityPrice> getSellEntries() {
+        return sellEntries;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -32,9 +40,6 @@ public class Summary {
 
     @Override
     public String toString() {
-        return "Summary{" +
-                "buyEntries=" + buyEntries +
-                ", sellEntries=" + sellEntries +
-                '}';
+        return String.format("Summary {buy=%s, sell=%s}", buyEntries, sellEntries);
     }
 }
