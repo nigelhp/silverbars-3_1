@@ -1,8 +1,14 @@
 package com.github.nigelhp.silverbars.board;
 
 import java.math.BigDecimal;
+import java.util.Comparator;
+
+import static java.util.Comparator.comparing;
 
 public class QuantityPrice {
+
+    public static final Comparator<QuantityPrice> PRICE_ASCENDING_COMPARATOR = comparing(QuantityPrice::getPrice);
+    public static final Comparator<QuantityPrice> PRICE_DESCENDING_COMPARATOR = PRICE_ASCENDING_COMPARATOR.reversed();
 
     private final BigDecimal quantity;
     private final Integer price;
