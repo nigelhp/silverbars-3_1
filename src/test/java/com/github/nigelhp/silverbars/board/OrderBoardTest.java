@@ -53,6 +53,16 @@ public class OrderBoardTest {
     }
 
     @Test
+    public void anOrderBoardSummaryAggregatesBuyOrdersWithTheSamePriceRegardlessOfUser() {
+        underTest.register(aBuyOrder("user1", quantity("3.5"), price(306)));
+        underTest.register(aBuyOrder("user2", quantity("2.0"), price(306)));
+
+        Summary summary = underTest.getSummary();
+
+        assertThat(summary.getBuyEntries(), contains(aSummaryEntry(quantity("5.5"), price(306))));
+    }
+
+    @Test
     public void anOrderBoardSummaryAggregatesSellOrdersWithTheSamePriceRegardlessOfUser() {
         underTest.register(aSellOrder("user1", quantity("3.5"), price(306)));
         underTest.register(aSellOrder("user2", quantity("2.0"), price(306)));

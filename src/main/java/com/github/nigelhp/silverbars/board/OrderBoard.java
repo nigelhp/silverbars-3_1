@@ -3,37 +3,35 @@ package com.github.nigelhp.silverbars.board;
 import com.github.nigelhp.silverbars.order.Order;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
+import static com.github.nigelhp.silverbars.order.Order.Type.BUY;
+import static com.github.nigelhp.silverbars.order.Order.Type.SELL;
+
 public class OrderBoard {
 
-    private final ConcurrentMap<Integer, QuantityPrice> sells;
-    private Order order;
+    private final ConcurrentMap<Integer, QuantityPrice> buysByPrice;
+    private final ConcurrentMap<Integer, QuantityPrice> sellsByPrice;
 
     public OrderBoard() {
-        sells = new ConcurrentHashMap<>();
+        buysByPrice = new ConcurrentHashMap<>();
+        sellsByPrice = new ConcurrentHashMap<>();
     }
 
     public void register(Order order) {
-        this.order = order;
+        QuantityPrice orderEntry = new QuantityPrice(order.getQuantity(), order.getPrice());
 
-        if (order.getType() == Order.Type.SELL) {
-            QuantityPrice orderEntry = new QuantityPrice(order.getQuantity(), order.getPrice());
-            sells.merge(order.getPrice(), orderEntry, QuantityPrice::add);
+        if (order.getType() == BUY) {
+            buysByPrice.merge(order.getPrice(), orderEntry, QuantityPrice::add);
+        } else if (order.getType() == SELL) {
+            sellsByPrice.merge(order.getPrice(), orderEntry, QuantityPrice::add);
+        } else {
+            throw new AssertionError(String.format("Order has unrecognised type: [%s]", order.getType()));
         }
     }
 
     public Summary getSummary() {
-        if (order == null) {
-            return new Summary(new ArrayList<>(), new ArrayList<>(sells.values()));
-        } else {
-            if (order.getType() == Order.Type.BUY) {
-                return new Summary(Collections.singletonList(new QuantityPrice(order.getQuantity(), order.getPrice())), new ArrayList<>(sells.values()));
-            } else {
-                return new Summary(Collections.emptyList(), new ArrayList<>(sells.values()));
-            }
-        }
+        return new Summary(new ArrayList<>(buysByPrice.values()), new ArrayList<>(sellsByPrice.values()));
     }
 }
