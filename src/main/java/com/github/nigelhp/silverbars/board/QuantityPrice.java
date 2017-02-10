@@ -7,13 +7,20 @@ import static java.util.Comparator.comparing;
 
 public class QuantityPrice {
 
-    public static final Comparator<QuantityPrice> PRICE_ASCENDING_COMPARATOR = comparing(QuantityPrice::getPrice);
-    public static final Comparator<QuantityPrice> PRICE_DESCENDING_COMPARATOR = PRICE_ASCENDING_COMPARATOR.reversed();
+    static final Comparator<QuantityPrice> PRICE_ASCENDING_COMPARATOR = comparing(QuantityPrice::getPrice);
+    static final Comparator<QuantityPrice> PRICE_DESCENDING_COMPARATOR = PRICE_ASCENDING_COMPARATOR.reversed();
 
     private final BigDecimal quantity;
     private final Integer price;
 
     public QuantityPrice(BigDecimal quantity, Integer price) {
+        if (quantity.signum() < 0) {
+            throw new IllegalArgumentException(String.format("quantity may not be negative [%s]", quantity));
+        }
+        if (price <= 0) {
+            throw new IllegalArgumentException(String.format("price must be positive [%s]", price));
+        }
+
         this.quantity = quantity;
         this.price = price;
     }
@@ -26,8 +33,13 @@ public class QuantityPrice {
         return price;
     }
 
-    public QuantityPrice add(QuantityPrice other) {
-        return new QuantityPrice(quantity.add(other.quantity), price);
+    QuantityPrice add(QuantityPrice other) {
+        if (price.equals(other.getPrice())) {
+            return new QuantityPrice(quantity.add(other.quantity), price);
+        } else {
+            throw new IllegalArgumentException(String.format("Cannot add a [%s] with price [%s] to one with a price of [%s]",
+                    this.getClass().getSimpleName(), other.getPrice(), price));
+        }
     }
 
     @Override
