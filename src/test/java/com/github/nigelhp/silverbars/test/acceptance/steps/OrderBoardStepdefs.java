@@ -3,6 +3,7 @@ package com.github.nigelhp.silverbars.test.acceptance.steps;
 import com.github.nigelhp.silverbars.board.OrderBoard;
 import com.github.nigelhp.silverbars.board.Summary;
 import com.github.nigelhp.silverbars.order.Order;
+import com.github.nigelhp.silverbars.order.Order.Type;
 import com.github.nigelhp.silverbars.test.acceptance.support.DataTableToSummaryConverter;
 import cucumber.api.DataTable;
 import cucumber.api.java.en.Given;
@@ -12,7 +13,6 @@ import cucumber.api.java.en.When;
 import java.math.BigDecimal;
 import java.util.Optional;
 
-import static com.github.nigelhp.silverbars.order.Order.Type.BUY;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
@@ -25,9 +25,9 @@ public class OrderBoardStepdefs {
         orderBoard = Optional.of(new OrderBoard());
     }
 
-    @When("^\"([^\"]*)\" registers an order to BUY (\\d\\.\\d) kg for £(\\d+)$")
-    public void registers_an_order_to_BUY_kg_for_£(String userId, String quantity, int price) {
-        orderBoard.ifPresent(b -> b.register(new Order(userId, BUY, new BigDecimal(quantity), price)));
+    @When("^\"([^\"]*)\" registers an order to (BUY|SELL) (\\d\\.\\d) kg for £(\\d+)$")
+    public void registers_an_order_to_BUY_kg_for_£(String userId, String type, String quantity, int price) {
+        orderBoard.ifPresent(b -> b.register(new Order(userId, Type.valueOf(type), new BigDecimal(quantity), price)));
     }
 
     @Then("^the order board is:$")
