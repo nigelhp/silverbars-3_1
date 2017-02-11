@@ -122,9 +122,13 @@ either low-level synchronization primitives or the higher-level abstractions of 
 As this implementation is in Java, I have chosen to support multiple concurrent requests with "shared state", relying on
 ConcurrentHashMap in particular to facilitate a high degree of safe concurrency.
 
-Note however that if we were to account for the cancellation of an order before the registration of that order, then
-this implementation could fail.  In such a scenario, it could attempt to calculate a negative quantity, which in the 
-current implementation would result in an exception.
+Note however that if we were to account for the cancellation of an order before the registration of that order, 
+because the current implementation attempts to prevent negative quantities, there is the possibility of either a lost
+cancellation or an exception.  If the cancellation price point does not currently exist, the cancellation will be lost.
+If the price point does exist, but processing the cancellation results in a negative quantity, an exception will be
+thrown.  This could be avoided by allowing the summary to temporarily represent a negative quantity (possibly filtering
+them out for display purposes), on the grounds that it will be corrected once the registration is successfully accounted 
+for.
 
 In the interests of time, I have not implemented any tests that concurrently interact with the 'Live Order Board' for
 this exercise.  It goes without saying that these would be required in a real system anticipating such usage.
