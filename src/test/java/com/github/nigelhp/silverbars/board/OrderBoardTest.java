@@ -14,8 +14,10 @@ import static java.util.Arrays.asList;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.is;
+import static org.mockito.ArgumentMatchers.notNull;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyZeroInteractions;
 import static org.mockito.Mockito.when;
 
 public class OrderBoardTest {
@@ -107,5 +109,36 @@ public class OrderBoardTest {
                 aSummaryEntry(quantity("2.5"), price(306)),
                 aSummaryEntry(quantity("2.5"), price(308)),
                 aSummaryEntry(quantity("2.5"), price(310))));
+    }
+
+    @Test
+    public void anOrderBoardListenerIsNotifiedFollowingAnOrderRegistration() {
+        OrderBoard.Listener listener = mock(OrderBoard.Listener.class);
+        underTest.addListener(listener);
+
+        underTest.register(aBuyOrder(quantity("2.5"), price(306)));
+
+        verify(listener).onOrderBoardChanged(notNull());
+    }
+
+    @Test
+    public void anOrderBoardListenerIsNotifiedFollowingAnOrderCancellation() {
+        OrderBoard.Listener listener = mock(OrderBoard.Listener.class);
+        underTest.addListener(listener);
+
+        underTest.cancel(aBuyOrder(quantity("2.5"), price(306)));
+
+        verify(listener).onOrderBoardChanged(notNull());
+    }
+
+    @Test
+    public void anOrderBoardListenerReceivesNoNotificationsAfterRemoval() {
+        OrderBoard.Listener listener = mock(OrderBoard.Listener.class);
+        underTest.addListener(listener);
+        underTest.removeListener(listener);
+
+        underTest.register(aBuyOrder(quantity("2.5"), price(306)));
+
+        verifyZeroInteractions(listener);
     }
 }
