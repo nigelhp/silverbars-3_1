@@ -55,13 +55,11 @@ Although there is no indication of BUY/SELL in the example board, there is a req
 applied to BUY and SELL orders.  I have therefore assumed that the 'Live Order Board' will display a summary where
 orders are categorised by the order type, for example:
 
-|       BUY Orders | SELL Orders      |
-|------------------|------------------|
-| Quantity | Price | Quantity | Price |
-|---------:|------:|---------:|------:|
-|      1.5 |   310 |      5.5 |   306 |
-|      2.5 |   308 |      1.5 |   307 |
-|      3.0 |   306 |      1.2 |   310 |
+| BUY Quantity | BUY Price | SELL Quantity | SELL Price |
+|-------------:|----------:|--------------:|-----------:|
+|          1.5 |       310 |           5.5 |        306 |
+|          2.5 |       308 |           1.5 |        307 |
+|          3.0 |       306 |           1.2 |        310 |
 
 ##### Lowest unit of pricing is £1
  
