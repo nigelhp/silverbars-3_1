@@ -6,20 +6,6 @@ Feature: An order is added to the board upon registration
   Background:
     Given there are no existing orders
 
-  Scenario: A buy order can be registered
-    When "user1" registers an order to BUY 3.5 kg for £303
-    Then the order board is:
-      | buy quantity | buy price | sell quantity | sell price |
-      |          3.5 |       303 |               |            |
-
-
-  Scenario: A sell order can be registered
-    When "user1" registers an order to SELL 3.5 kg for £303
-    Then the order board is:
-      | buy quantity | buy price | sell quantity | sell price |
-      |              |           |           3.5 |        303 |
-
-
   Scenario: Sell orders with the same price are aggregated
     Given "user1" registers an order to SELL 3.5 kg for £306
     When "user4" registers an order to SELL 2.0 kg for £306
