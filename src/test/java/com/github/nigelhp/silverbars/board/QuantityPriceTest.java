@@ -3,16 +3,16 @@ package com.github.nigelhp.silverbars.board;
 import org.junit.Test;
 
 import java.math.BigDecimal;
-import java.util.List;
 
 import static com.github.nigelhp.silverbars.board.CommonTestLanguage.price;
 import static com.github.nigelhp.silverbars.board.CommonTestLanguage.quantity;
 import static com.github.nigelhp.silverbars.board.QuantityPrice.PRICE_ASCENDING_COMPARATOR;
 import static com.github.nigelhp.silverbars.board.QuantityPrice.PRICE_DESCENDING_COMPARATOR;
-import static java.util.Arrays.asList;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.contains;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.lessThan;
 import static org.junit.Assert.fail;
 
 public class QuantityPriceTest {
@@ -123,25 +123,21 @@ public class QuantityPriceTest {
 
     @Test
     public void priceAscendingComparator() {
-        QuantityPrice price308 = new QuantityPrice(quantity("1.5"), price(308));
-        QuantityPrice price310 = new QuantityPrice(quantity("2.5"), price(310));
-        QuantityPrice price306 = new QuantityPrice(quantity("3.5"), price(306));
-        List<QuantityPrice> entries = asList(price308, price310, price306);
+        QuantityPrice lowPrice = new QuantityPrice(quantity("2.5"), price(308));
+        QuantityPrice highPrice = new QuantityPrice(quantity("2.5"), price(310));
 
-        entries.sort(PRICE_ASCENDING_COMPARATOR);
-
-        assertThat(entries, contains(price306, price308, price310));
+        assertThat("lessThan", PRICE_ASCENDING_COMPARATOR.compare(lowPrice, highPrice), lessThan(0));
+        assertThat("greaterThan", PRICE_ASCENDING_COMPARATOR.compare(highPrice, lowPrice), greaterThan(0));
+        assertThat("equalTo", PRICE_ASCENDING_COMPARATOR.compare(lowPrice, lowPrice), equalTo(0));
     }
 
     @Test
     public void priceDescendingComparator() {
-        QuantityPrice price306 = new QuantityPrice(quantity("3.5"), price(306));
-        QuantityPrice price310 = new QuantityPrice(quantity("2.5"), price(310));
-        QuantityPrice price308 = new QuantityPrice(quantity("1.5"), price(308));
-        List<QuantityPrice> entries = asList(price306, price310, price308);
+        QuantityPrice lowPrice = new QuantityPrice(quantity("2.5"), price(308));
+        QuantityPrice highPrice = new QuantityPrice(quantity("2.5"), price(310));
 
-        entries.sort(PRICE_DESCENDING_COMPARATOR);
-
-        assertThat(entries, contains(price310, price308, price306));
+        assertThat("lessThan", PRICE_DESCENDING_COMPARATOR.compare(highPrice, lowPrice), lessThan(0));
+        assertThat("greaterThan", PRICE_DESCENDING_COMPARATOR.compare(lowPrice, highPrice), greaterThan(0));
+        assertThat("equalTo", PRICE_DESCENDING_COMPARATOR.compare(highPrice, highPrice), equalTo(0));
     }
 }
