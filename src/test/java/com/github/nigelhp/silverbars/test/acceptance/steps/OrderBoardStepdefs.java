@@ -42,7 +42,7 @@ public class OrderBoardStepdefs {
     }
 
     @When("^\"([^\"]*)\" cancels an order to (BUY|SELL) (\\d+\\.\\d) kg for £(\\d+)$")
-    public void cancels_an_order_to_SELL_kg_for_£(String userId, String type, String quantity, int price) {
+    public void cancels_an_order_to_for(String userId, String type, String quantity, int price) {
         orderBoard.ifPresent(b -> b.cancel(new Order(userId, Type.valueOf(type), new BigDecimal(quantity), price)));
     }
 

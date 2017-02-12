@@ -12,6 +12,8 @@ import static java.util.stream.Collectors.toList;
 
 class OrderTypeSummary {
 
+    private static final QuantityPrice REMOVE_ENTRY = null;
+
     private final Order.Type orderType;
     private final Comparator<QuantityPrice> ordering;
     private final ConcurrentMap<Integer, QuantityPrice> entriesByPrice;
@@ -31,7 +33,7 @@ class OrderTypeSummary {
     void cancel(Order order) {
         processOrder(order, orderEntry -> entriesByPrice.computeIfPresent(order.getPrice(), (price, existingEntry) -> {
             QuantityPrice newEntry = existingEntry.subtract(orderEntry);
-            return (newEntry.getQuantity().signum() == 0) ? null : newEntry;
+            return (newEntry.getQuantity().signum() == 0) ? REMOVE_ENTRY : newEntry;
         }));
     }
 
